@@ -43,9 +43,9 @@ Usage:
 Require nix-straight-overrides right after loading straight.el
 
 #+begin_src emacs-lisp
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; code that load straight.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; code that loads straight.el ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'nix-straight-overrides)
 
