@@ -38,6 +38,29 @@ Usage:
 }
 #+end_src
 
+** Defining your emacs
+
+With home-manager:
+
+#+begin_src nix
+...
+  programs.emacs = {
+    enable = true;
+    package = your-emacs-package;
+    extraPackages = (epkgs: epkgs.withStraightOverrides [ ... ]);
+  };
+...
+#+end_src
+
+As a package:
+
+#+begin_src nix
+...
+  myEmacs = (emacsPackagesFor some-emacs-package).withPackages
+    (epkgs: epkgs.withStraightOverrides [ ... ]);
+...
+#+end_src
+
 ** Then in emacs
 
 Require nix-straight-overrides right after loading straight.el
