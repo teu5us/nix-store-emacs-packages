@@ -46,18 +46,25 @@ will be installed by straight.el
 With home-manager:
 
 #+begin_src nix
-programs.emacs = {
-  enable = true;
-  package = your-emacs-package;
-  extraPackages = (epkgs: epkgs.withStraightOverrides [ package-list ]);
-};
+{
+  programs.emacs = {
+    enable = true;
+    package = your-emacs-package;
+    extraPackages = (epkgs: epkgs.withStraightOverrides [ package-list ]);
+  };
+}
 #+end_src
 
 As a package:
 
 #+begin_src nix
-myEmacs = (emacsPackagesFor some-emacs-package).withPackages
-  (epkgs: epkgs.withStraightOverrides [ package-list ]);
+{
+  environment.systemPackages =
+    let
+      myEmacs = (emacsPackagesFor some-emacs-package).withPackages
+        (epkgs: epkgs.withStraightOverrides [ package-list ]);
+    in [ myEmacs ];
+}
 #+end_src
 
 ** Then in emacs
