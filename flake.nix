@@ -1,6 +1,6 @@
 {
   outputs = { self, nixpkgs }: {
-    module =
+    nixosModule =
       { config, lib, pkgs, utils, ... }: {
         nixpkgs.overlays = [
           (import ./default.nix)
