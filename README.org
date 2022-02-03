@@ -1,24 +1,27 @@
-This repository provides an overlay to nixpkgs' emacs packages set that provides `withStraightOverrides` -- a function that adds a library to emacs to override straight.el recipes for packages installed by nix marking them as built-in, which prevents straight.el from downloading and building them. All the other packages not declared in nix will be installed by straight.el
+* Description
 
-Usage:
+This repository provides an overlay to nixpkgs' emacs packages set.
+
+The overlay adds ~withStraightOverrides~ -- a function that generates a library
+and makes it available to emacs. The library overrides straight.el recipes for
+packages that are already installed by nix. Whatever is not installed by nix
+will be installed by straight.el
+
+* Usage
 
 ** In flake-based NixOS configuration
 
 #+begin_src nix
 {
-  inputs.nixpkgs.url = ...;
+  inputs.nixpkgs.url = "github:nixos/nixpkgs";
   inputs.nix-store-emacs-packages.url = "github:teu5us/nix-store-emacs-packages";
   inputs.nix-store-emacs-packages.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, nixpkgs, nix-store-emacs-packages }: {
     nixosConfigurations.hostname = nixpkgs.lib.nixosSystem {
-      ...
       modules = [
-        ...
         nix-store-emacs-packages.nixosModule
-        ...
       ];
-      ...
     };
   }
 }
@@ -43,22 +46,18 @@ Usage:
 With home-manager:
 
 #+begin_src nix
-...
-  programs.emacs = {
-    enable = true;
-    package = your-emacs-package;
-    extraPackages = (epkgs: epkgs.withStraightOverrides [ ... ]);
-  };
-...
+programs.emacs = {
+  enable = true;
+  package = your-emacs-package;
+  extraPackages = (epkgs: epkgs.withStraightOverrides [ package-list ]);
+};
 #+end_src
 
 As a package:
 
 #+begin_src nix
-...
-  myEmacs = (emacsPackagesFor some-emacs-package).withPackages
-    (epkgs: epkgs.withStraightOverrides [ ... ]);
-...
+myEmacs = (emacsPackagesFor some-emacs-package).withPackages
+  (epkgs: epkgs.withStraightOverrides [ package-list ]);
 #+end_src
 
 ** Then in emacs
