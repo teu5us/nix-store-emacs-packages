@@ -4,10 +4,11 @@
 
 ;;; Commentary:
 
+;; Load after straight.el
+
 ;;; Code:
 
 (require 'cl-lib)
-(require 'straight)
 
 ;;;; Utility
 
