@@ -23,7 +23,7 @@ will be installed by straight.el
         nix-store-emacs-packages.nixosModule
       ];
     };
-  }
+  };
 }
 #+end_src
 
