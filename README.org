@@ -1,0 +1,56 @@
+This repository provides an overlay to nixpkgs' emacs packages set that provides `withStraightOverrides` -- a function that adds a library to emacs to override straight.el recipes for packages installed by nix marking them as built-in, which prevents straight.el from downloading and building them. All the other packages not declared in nix will be installed by straight.el
+
+Usage:
+
+** In flake-based NixOS configuration
+
+#+begin_src nix
+{
+  inputs.nixpkgs.url = ...;
+  inputs.nix-store-emacs-packages.url = "github:teu5us/nix-store-emacs-packages";
+  inputs.nix-store-emacs-packages.inputs.nixpkgs.follows = "nixpkgs";
+
+  outputs = { self, nixpkgs, nix-store-emacs-packages }: {
+    nixosConfigurations.hostname = nixpkgs.lib.nixosSystem {
+      ...
+      modules = [
+        ...
+        nix-store-emacs-packages.nixosModule
+        ...
+      ];
+      ...
+    };
+  }
+}
+#+end_src
+
+** In channel-based configuration
+
+#+begin_src nix
+{ config, pkgs, options, lib, ... }:
+
+{
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = "https://github.com/teu5us/nix-store-emacs-packages/archive/refs/heads/main.tar.gz";
+    }))
+  ];
+}
+#+end_src
+
+** Then in emacs
+
+Require nix-straight-overrides right after loading straight.el
+
+#+begin_src emacs-lisp
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; code that load straight.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'nix-straight-overrides)
+
+;; or possibly if you use the same configuration elsewhere
+
+(ignore-errors
+  (require 'nix-straight-overrides))
+#+end_src
